@@ -4,4 +4,8 @@ version: 0.1.0
 authors:
   - Aleksander Kwiatkowski <bobikx@poczta.fm>
 
-license: MIT
+dependencies:
+  crystal_metar_parser:
+    github: akwiatkowski/crystal_metar_parser
+
+license: GPLv3
