@@ -5,13 +5,21 @@ require "logger"
 path = File.join("config", "weather.yml")
 cities = WeatherCrystal::WeatherCity.load_yaml(path)
 logger = Logger.new(STDOUT)
+sleep_amount = 60*10
 
-cities.each do |city|
-  o = WeatherCrystal::Provider::Noaa.new( city )
-  weathers = o.fetch
+loop do
+  cities.each do |city|
 
-  storage = WeatherCrystal::WeatherStorage.new
-  count = storage.store( weathers )
+    o = WeatherCrystal::Provider::Noaa.new( city )
+    weathers = o.fetch
 
-  logger.info("#{city.metar} done with #{count} weather data") if count > 0
+    storage = WeatherCrystal::WeatherStorage.new
+    count = storage.store( weathers )
+
+    logger.info("#{city.metar} done with #{count} weather data") if count > 0
+  end
+
+  logger.info("Sleep #{sleep_amount} seconds")
+  sleep sleep_amount
+
 end
