@@ -4,7 +4,6 @@ require "logger"
 class WeatherCrystal::WeatherFetcher
   def initialize(config_path)
     @cities = WeatherCrystal::WeatherCity.load_yaml(config_path)
-    @logger = Logger.new(STDOUT)
     @sleep_amount = 60*10
     @sleep_amount = 10
   end
@@ -20,7 +19,7 @@ class WeatherCrystal::WeatherFetcher
       storage = WeatherCrystal::WeatherStorage.new
       count = storage.store( weathers )
 
-      @logger.info("#{city.metar} done with #{count} weather data") if count > 0
+      puts "#{city.metar} done with #{count} weather data" if count > 0
     end
   end
 
@@ -28,7 +27,7 @@ class WeatherCrystal::WeatherFetcher
     while true
       one_fetch
 
-      @logger.info("Sleep #{@sleep_amount} seconds")
+      puts "Sleep #{@sleep_amount} seconds"
       sleep sleep_amount
     end
   end
