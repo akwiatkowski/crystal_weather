@@ -10,11 +10,17 @@ class WeatherCrystal::WeatherCity
   property :lat
   property :lon
 
+  property :last_metar
+
   def initialize
     @metar = ""
+    # last feftched metar string
+    @last_metar = ""
+
     @lat = 0.0
     @lon = 0.0
   end
+
 
   def self.load_yaml(path)
     cities = [] of WeatherCrystal::WeatherCity
@@ -30,12 +36,12 @@ class WeatherCrystal::WeatherCity
       city.name = hash[":name"]
       city.country = hash[":country"]
 
-      city.metar = hash[":metar"].to_s if hash.has_key?(":metar")
+      if hash.has_key?(":metar")
+        city.metar = hash[":metar"].to_s
+      end
 
       city.lat = coords[":lat"].to_s.to_f
       city.lon = coords[":lon"].to_s.to_f
-
-      puts city.inspect
 
       cities << city
     end

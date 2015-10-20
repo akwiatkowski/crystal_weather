@@ -15,7 +15,6 @@ class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
   end
 
   def download(url)
-    puts url
     return HTTP::Client.get(url)
   end
 

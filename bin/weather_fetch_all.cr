@@ -1,13 +1,17 @@
 require "../src/weather_crystal"
 require "yaml"
+require "logger"
 
 path = File.join("config", "weather.yml")
 cities = WeatherCrystal::WeatherCity.load_yaml(path)
+logger = Logger.new(STDOUT)
 
-#puts cities.inspect
+cities.each do |city|
+  o = WeatherCrystal::Provider::Noaa.new( city )
+  weathers = o.fetch
 
-city = WeatherCrystal::WeatherCity.new
-city.metar = "EPPO"
+  storage = WeatherCrystal::WeatherStorage.new
+  count = storage.store( weathers )
 
-o = WeatherCrystal::Provider::Noaa.new( city )
-o.fetch
+  logger.info("#{city.metar} done with #{count} weather data") if count > 0
+end

@@ -3,6 +3,8 @@ require "./weather_city"
 class WeatherCrystal::WeatherData
   def initialize(_city)
     @city = _city as WeatherCity
+    @metar = nil
+    @metar_string = ""
 
     @time_from = Time.now
     @time_to = Time.now
@@ -24,6 +26,7 @@ class WeatherCrystal::WeatherData
   end
 
   property :city
+  property :metar_string, :metar
   property :time_from, :time_to
   property :temperature, :dew, :humidity, :wind_chill
   property :wind, :wind_direction
@@ -32,6 +35,10 @@ class WeatherCrystal::WeatherData
 
   def metar
     self.city.metar
+  end
+
+  def is_metar?
+    self.metar_string != ""
   end
 
 end

@@ -15,11 +15,19 @@ class WeatherCrystal::MetarProvider < WeatherCrystal::HttpProvider
     10*60
   end
 
+  def fetch
+    return nil if self.city.metar == ""
+    super
+  end
+
   def process(data)
     metar = CrystalMetarParser::Parser.parse(data)
     data = WeatherData.new(self.city)
 
     # copy properties
+    data.metar = metar
+    data.metar_string = metar.raw
+
     data.time_from = metar.time.time_from
     data.time_to = metar.time.time_to
 
@@ -27,7 +35,6 @@ class WeatherCrystal::MetarProvider < WeatherCrystal::HttpProvider
     data.dew = metar.temperature.dew
     data.humidity = metar.temperature.humidity
     data.wind_chill = metar.temperature.wind_chill
-
 
     data.wind = metar.wind.speed
     data.wind_direction = metar.wind.direction
@@ -39,7 +46,7 @@ class WeatherCrystal::MetarProvider < WeatherCrystal::HttpProvider
     data.rain_metar = metar.specials.rain_metar
     data.snow_metar = metar.specials.snow_metar
 
-    puts data.inspect
+    # puts data.inspect
 
     return [data]
   end
