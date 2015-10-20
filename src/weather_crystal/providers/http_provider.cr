@@ -6,10 +6,15 @@ class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
   TYPE = :http
 
   def fetch
-    result = download(url)
-    if result.status_code == 200
-      return process(result.body)
-    else
+    begin
+      result = download(url)
+      if result.status_code == 200
+        return process(result.body)
+      else
+        return nil
+      end
+    rescue Socket::Error
+      puts "Socket::Error"
       return nil
     end
   end

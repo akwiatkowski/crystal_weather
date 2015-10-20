@@ -6,6 +6,7 @@ path = File.join("config", "weather.yml")
 cities = WeatherCrystal::WeatherCity.load_yaml(path)
 logger = Logger.new(STDOUT)
 sleep_amount = 60*10
+sleep_amount = 10
 
 loop do
   cities.each do |city|
