@@ -16,6 +16,9 @@ class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
     rescue Socket::Error
       puts "Socket::Error"
       return nil
+    rescue
+      puts "Other error"
+      return nil
     end
   end
 
