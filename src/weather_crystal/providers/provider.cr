@@ -12,11 +12,9 @@ class WeatherCrystal::Provider
   def initialize(_city)
     @city = _city as WeatherCity
     @weathers = [] of WeatherData
-    @logger = Logger.new(STDOUT)
   end
 
   getter :weathers
-  getter :logger
   getter :city
 
   # Name of provider
