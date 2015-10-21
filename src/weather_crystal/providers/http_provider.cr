@@ -17,10 +17,10 @@ class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
         return [] of WeatherData
       end
     rescue Socket::Error
-      self.logger.error("HttpProvider Socket::Error")
+      self.logger.error("HttpProvider Socket::Error, city #{city.inspect}")
       return [] of WeatherData
     rescue
-      self.logger.error("HttpProvider Other error")
+      self.logger.error("HttpProvider Other error, city #{city.inspect}")
       return [] of WeatherData
     end
   end
@@ -34,6 +34,10 @@ class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
   end
 
   def url_for_city(city)
+    raise NotImplementedError
+  end
+
+  def process_for_city(city, data)
     raise NotImplementedError
   end
 end

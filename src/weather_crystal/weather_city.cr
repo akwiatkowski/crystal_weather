@@ -11,11 +11,18 @@ class WeatherCrystal::WeatherCity
   property :lon
 
   property :last_metar
+  property :url_hash
+
+  CLASSES_NAMES = [
+    "InteriaPl"
+  ]
 
   def initialize
     @metar = ""
     # last feftched metar string
     @last_metar = ""
+
+    @url_hash = {} of String => String
 
     @lat = 0.0
     @lon = 0.0
@@ -37,6 +44,18 @@ class WeatherCrystal::WeatherCity
 
       if hash.has_key?(":metar")
         city.metar = hash[":metar"].to_s
+      end
+
+      # load data for external classes
+      if hash.has_key?(":classes")
+        classes_hash = hash[":classes"] as Hash(YAML::Type, YAML::Type)
+
+        CLASSES_NAMES.each do |k|
+          if classes_hash.has_key?(k)
+            class_hash = classes_hash["InteriaPl"] as Hash(YAML::Type, YAML::Type)
+            city.url_hash[k] = class_hash[":url"].to_s
+          end
+        end
       end
 
       city.lat = coords[":lat"].to_s.to_f

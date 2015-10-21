@@ -14,6 +14,9 @@ class WeatherCrystal::WeatherFetcher
     # providers
     @metar_noaa = WeatherCrystal::Provider::Noaa.new(@logger)
     @metar_wunderground = WeatherCrystal::Provider::Wunderground.new(@logger)
+    @metar_aviation_weather = WeatherCrystal::Provider::AviationWeather.new(@logger)
+
+    @storage = WeatherCrystal::WeatherStorage.new
 
     @sleep_amount = 60 * 10
     @sleep_amount = 1
@@ -24,8 +27,7 @@ class WeatherCrystal::WeatherFetcher
   def single_fetch
     @cities.each do |city|
       weathers = single_fetch_per_city(city)
-      storage = WeatherCrystal::WeatherStorage.new
-      count = storage.store(weathers)
+      count = @storage.store(weathers)
 
       @logger.info "#{city.metar} done with #{count} weather data" if count > 0
     end
@@ -35,6 +37,7 @@ class WeatherCrystal::WeatherFetcher
     weathers = [] of WeatherData
     weathers += @metar_noaa.fetch_for_city(city)
     weathers += @metar_wunderground.fetch_for_city(city)
+    weathers += @metar_aviation_weather.fetch_for_city(city)
 
     return weathers
   end
