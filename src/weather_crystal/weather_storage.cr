@@ -70,6 +70,16 @@ class WeatherCrystal::WeatherStorage
   end
 
   def store_regular(data)
-    return false
+    monthly_prefix = data.time_from.to_s("%Y_%m")
+    path_dir = File.join("data", "regular", data.city.name.to_s, data.source.to_s, monthly_prefix)
+    path_file = File.join(path_dir, "#{data.city.name}_#{data.source}_#{monthly_prefix}.txt")
+
+    Dir.mkdir_p(path_dir)
+
+    file = File.new(path_file, "a")
+    file.puts data.regular_to_json
+    file.close
+
+    return true
   end
 end

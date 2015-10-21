@@ -52,6 +52,8 @@ class WeatherCrystal::Provider::InteriaPl < WeatherCrystal::HttpProvider
         d.clouds = hour_node.xpath_node(".//*[@class='entry-precipitation-value cloud-cover']").inner_text.to_s.gsub(/\D/, "").to_i
         d.rain_mm = hour_node.xpath_node(".//*[@class='entry-precipitation-value rain']").inner_text.to_s.gsub(/\D/, "").to_i
 
+        d.source = self.class.provider_key
+
         array << d
       end
       day += 1
