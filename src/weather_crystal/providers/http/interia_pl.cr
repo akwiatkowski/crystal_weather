@@ -18,25 +18,45 @@ class WeatherCrystal::Provider::InteriaPl < WeatherCrystal::HttpProvider
   end
 
   def process_for_city(city, data)
-    d = WeatherData.new(city)
+    array = [] of WeatherData
 
     x = XML.parse_html(data)
-    #forecast_days = x.xpath_node("*[contains(@class,weather-forecast-day)]")
-    forecast_days = x.xpath_node("//*[contains(@class,hour)]")
-    puts forecast_days.attributes
+    initial_time = Time.new(
+      Time.now.year,
+      Time.now.month,
+      Time.now.day
+    )
+    day = 0
+    span_day =
+    span_hour = Time::Span.new(1, 0, 0)
 
-    puts data
+    main_content = x.xpath_node("//*[@class='main-content']")
+    forecast_day_nodes = main_content.xpath_nodes(".//*[contains(@class, 'weather-forecast-day')]")
+    forecast_day_nodes.each do |day_node|
 
-    #forecast_days.si.each do |day_node|
-    #  puts day_node.attributes
-      #puts day_node.xpath_node("//*[contains(@class,weather-entry)]").children.size
-    #  hourly_nodes = day_node.xpath_node("//*[contains(@class,weather-entry)]")
-    #  hourly_nodes.each do |hour_node|
-    #    hour = hour_node.xpath_node("//*[contains(@class,hour)]")
-    #    puts hour.inner_text
-    #  end
-    #end
+      hourly_nodes = day_node.xpath_nodes(".//*[@class='weather-entry']")
+      hourly_nodes.each do |hour_node|
+        d = WeatherData.new(city)
 
-    return d
+        hour = hour_node.xpath_node(".//*[@class='hour']").inner_text.to_s.to_i
+        d.time_from = initial_time + Time::Span.new(day, hour, 0, 0)
+        d.time_to = d.time_from + Time::Span.new(1, 0, 0)
+
+        d.temperature = hour_node.xpath_node(".//*[@class='forecast-temp']").inner_text.to_s.to_f
+        wind_chill = hour_node.xpath_node(".//*[@class='forecast-feeltemp']").inner_text.to_s.gsub(/\D/, "").to_f
+        d.wind_chill = wind_chill
+
+        d.wind_speed_in_kmh = hour_node.xpath_node(".//*[@class='speed-value']").inner_text.to_s.to_f
+        d.max_wind_speed_in_kmh = hour_node.xpath_node(".//*[@class='wind-hit']").inner_text.to_s.gsub(/\D/, "").to_f
+
+        d.clouds = hour_node.xpath_node(".//*[@class='entry-precipitation-value cloud-cover']").inner_text.to_s.gsub(/\D/, "").to_i
+        d.rain_mm = hour_node.xpath_node(".//*[@class='entry-precipitation-value rain']").inner_text.to_s.gsub(/\D/, "").to_i
+
+        array << d
+      end
+      day += 1
+    end
+
+    return array
   end
 end

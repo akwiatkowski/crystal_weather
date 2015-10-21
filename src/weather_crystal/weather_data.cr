@@ -8,6 +8,7 @@ class WeatherCrystal::WeatherData
 
     @time_from = Time.now
     @time_to = Time.now
+    @time_created = Time.now
 
     @temperature = -255.0
     @dew = -255.0
@@ -15,6 +16,7 @@ class WeatherCrystal::WeatherData
     @wind_chill = -255
 
     @wind = -1.0
+    @wind_max = -1.0
     @wind_direction = -1
 
     @visibility = -1
@@ -23,7 +25,12 @@ class WeatherCrystal::WeatherData
 
     @rain_metar = -1
     @snow_metar = -1
+
+    @rain_mm = -1
+    @snow_mm = -1
   end
+
+  getter :time_created
 
   property :city
   property :metar_string, :metar
@@ -32,6 +39,7 @@ class WeatherCrystal::WeatherData
   property :wind, :wind_direction
   property :visibility, :pressure, :clouds
   property :snow_metar, :rain_metar
+  property :rain_mm, :snow_mm
 
   def metar
     self.city.metar
@@ -39,5 +47,13 @@ class WeatherCrystal::WeatherData
 
   def is_metar?
     self.metar_string != ""
+  end
+
+  def wind_speed_in_kmh=(_kmh)
+    @wind = _kmh.to_f / 3.6
+  end
+
+  def max_wind_speed_in_kmh=(_kmh)
+    @max_wind = _kmh.to_f / 3.6
   end
 end
