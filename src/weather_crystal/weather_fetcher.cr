@@ -82,11 +82,13 @@ class WeatherCrystal::WeatherFetcher
 
   def metar_fetch
     single_fetch_metar
+    @logger.info("Metar sleep #{@sleep_metar_amount}")
     sleep @sleep_metar_amount
   end
 
   def regular_fetch
     single_fetch_regular
+    @logger.info("Regular sleep #{@sleep_regular_amoun}")
     sleep @sleep_regular_amount
   end
 end
