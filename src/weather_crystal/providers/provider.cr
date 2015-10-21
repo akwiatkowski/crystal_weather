@@ -9,25 +9,23 @@ class WeatherCrystal::Provider
   HOUR = 3600
 
   # Create an instance, definitions can be set here
-  def initialize(_city)
-    @city = _city as WeatherCity
-    @weathers = [] of WeatherData
+  def initialize(_logger = Logger.new(STDOUT))
+    @logger = _logger
   end
 
-  getter :weathers
-  getter :city
+  getter :logger
 
   # Name of provider
   def provider_name
     self.class.provider_name
   end
 
-  # Name of provider, should be overrode
-  def self.provider_name
+  def fetch_for_city(city)
     raise NotImplementedError
   end
 
-  def fetch
+  # Name of provider, should be overrode
+  def self.provider_name
     raise NotImplementedError
   end
 
@@ -46,5 +44,4 @@ class WeatherCrystal::Provider
   def short_class_name
     self.class.short_class_name
   end
-
 end

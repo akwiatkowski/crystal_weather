@@ -2,23 +2,26 @@ require "http"
 
 # All ugly providers who parse even uglier html code and rip off data
 class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
-
   TYPE = :http
 
-  def fetch
+  def fetch_for_city(city)
     begin
+      url = url_for_city(city)
+      return [] of WeatherData if url == ""
+
       result = download(url)
       if result.status_code == 200
-        return process(result.body)
+        return process_for_city(city, process_body( result.body) )
       else
-        return nil
+        self.logger.error("HttpProvider Http status not 200, url #{url}, city #{city.inspect}")
+        return [] of WeatherData
       end
     rescue Socket::Error
-      puts "Socket::Error"
-      return nil
+      self.logger.error("HttpProvider Socket::Error")
+      return [] of WeatherData
     rescue
-      puts "Other error"
-      return nil
+      self.logger.error("HttpProvider Other error")
+      return [] of WeatherData
     end
   end
 
@@ -26,8 +29,11 @@ class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
     return HTTP::Client.get(url)
   end
 
-  def url
-    raise NotImplementedError
+  def process_body(body)
+    body
   end
 
+  def url_for_city(city)
+    raise NotImplementedError
+  end
 end

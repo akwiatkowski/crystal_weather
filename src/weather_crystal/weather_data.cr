@@ -40,5 +40,4 @@ class WeatherCrystal::WeatherData
   def is_metar?
     self.metar_string != ""
   end
-
 end

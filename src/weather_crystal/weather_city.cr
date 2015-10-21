@@ -21,7 +21,6 @@ class WeatherCrystal::WeatherCity
     @lon = 0.0
   end
 
-
   def self.load_yaml(path)
     cities = [] of WeatherCrystal::WeatherCity
 

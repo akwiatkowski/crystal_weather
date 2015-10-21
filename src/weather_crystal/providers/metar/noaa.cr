@@ -1,13 +1,14 @@
 class WeatherCrystal::Provider::Noaa < WeatherCrystal::MetarProvider
-  def url
+  def url_for_city(city)
+    return "" if city.metar == ""
     return "http://weather.noaa.gov/pub/data/observations/metar/stations/#{city.metar.to_s.upcase}.TXT"
   end
 
-  def process_a(string)
-    string.gsub!(/\d{4}\/\d{1,2}\/\d{1,2} \d{1,2}\:\d{1,2}\s*/, ' ')
-    string.gsub!(/\n/, ' ')
-    string.gsub!(/\t/, ' ')
-    string.gsub!(/\s{2,}/, ' ')
+  def process_body(string)
+    string = string.gsub(/\d{4}\/\d{1,2}\/\d{1,2} \d{1,2}\:\d{1,2}\s*/, ' ')
+    string = string.gsub(/\n/, ' ')
+    string = string.gsub(/\t/, ' ')
+    string = string.gsub(/\s{2,}/, ' ')
     string.strip
   end
 end

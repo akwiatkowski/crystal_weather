@@ -4,30 +4,46 @@ require "logger"
 class WeatherCrystal::WeatherFetcher
   def initialize(config_path)
     @cities = WeatherCrystal::WeatherCity.load_yaml(config_path)
-    @sleep_amount = 60*10
-    @sleep_amount = 10
+
+    @logger = Logger.new(STDOUT)
+    @logger.formatter = Logger::Formatter.new do |severity, datetime, progname, message, io|
+                          io << severity[0] << ", [" << datetime.to_s("%H:%M:%S.%L") << "] "
+                          io << severity.rjust(5) << ": " << message
+                        end
+
+    # providers
+    @metar_noaa = WeatherCrystal::Provider::Noaa.new(@logger)
+    @metar_wunderground = WeatherCrystal::Provider::Wunderground.new(@logger)
+
+    @sleep_amount = 60 * 10
+    @sleep_amount = 1
   end
 
   property :sleep_amount
 
-  def one_fetch
+  def single_fetch
     @cities.each do |city|
-
-      o = WeatherCrystal::Provider::Noaa.new( city )
-      weathers = o.fetch
-
+      weathers = single_fetch_per_city(city)
       storage = WeatherCrystal::WeatherStorage.new
-      count = storage.store( weathers )
+      count = storage.store(weathers)
 
-      puts "#{city.metar} done with #{count} weather data" if count > 0
+      @logger.info "#{city.metar} done with #{count} weather data" if count > 0
     end
+  end
+
+  def single_fetch_per_city(city)
+    weathers = [] of WeatherData
+    weathers += @metar_noaa.fetch_for_city(city)
+    weathers += @metar_wunderground.fetch_for_city(city)
+
+    return weathers
   end
 
   def loop_fetch
     while true
-      one_fetch
+      single_fetch
 
-      puts "Sleep #{@sleep_amount} seconds"
+      @logger.info "Sleep #{@sleep_amount} seconds"
       sleep sleep_amount
     end
   end

@@ -1,6 +1,9 @@
 class WeatherCrystal::WeatherStorage
   def initialize
+    @metar_last_times = {} of String => Time
   end
+
+  METAR_THRESHOLD_STORE_TIME = Time::Span.new(4, 0, 0)
 
   def store(weather_datas)
     count = 0
@@ -27,11 +30,26 @@ class WeatherCrystal::WeatherStorage
     end
   end
 
-  def store_metar(data)
-    if data.city.last_metar == data.metar_string
-      # was stored
-      return false
+  def store_metar?(data)
+    interval = Time.utc_now - data.time_from
+    return false if interval > METAR_THRESHOLD_STORE_TIME
+
+    if @metar_last_times.has_key?(data.city.metar)
+      if @metar_last_times[data.city.metar] >= data.time_from
+        # already stored
+        return false
+      else
+        # it is newer
+        return true
+      end
+    else
+      # not yet stored
+      return true
     end
+  end
+
+  def store_metar(data)
+    return false if false == store_metar?(data)
 
     monthly_prefix = data.time_from.to_s("%Y_%m")
     metar_code = data.city.metar
@@ -45,6 +63,7 @@ class WeatherCrystal::WeatherStorage
     file.close
 
     # not to store equal
+    @metar_last_times[data.city.metar] = data.time_from
     data.city.last_metar = data.metar_string
 
     return true

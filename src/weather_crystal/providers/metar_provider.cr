@@ -3,8 +3,7 @@ require "crystal_metar_parser"
 class WeatherCrystal::MetarProvider < WeatherCrystal::HttpProvider
   TYPE = :metar
   # treat metars as not current when time_from is not within time range
-  MAX_METAR_TIME_THRESHOLD = 4*3600
-
+  MAX_METAR_TIME_THRESHOLD = 4 * 3600
 
   def self.provider_name
     "MetarProvider"
@@ -12,17 +11,12 @@ class WeatherCrystal::MetarProvider < WeatherCrystal::HttpProvider
 
   # How often weather is updated
   def self.weather_updated_every
-    10*60
+    10 * 60
   end
 
-  def fetch
-    return nil if self.city.metar == ""
-    super
-  end
-
-  def process(data)
+  def process_for_city(city, data)
     metar = CrystalMetarParser::Parser.parse(data)
-    data = WeatherData.new(self.city)
+    data = WeatherData.new(city)
 
     # copy properties
     data.metar = metar
@@ -46,9 +40,6 @@ class WeatherCrystal::MetarProvider < WeatherCrystal::HttpProvider
     data.rain_metar = metar.specials.rain_metar
     data.snow_metar = metar.specials.snow_metar
 
-    # puts data.inspect
-
     return [data]
   end
-
 end
