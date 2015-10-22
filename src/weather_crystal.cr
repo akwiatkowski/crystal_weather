@@ -3,6 +3,7 @@ require "./weather_crystal/version"
 require "./weather_crystal/weather_city"
 require "./weather_crystal/weather_data"
 require "./weather_crystal/weather_storage"
+require "./weather_crystal/weather_web_storage"
 require "./weather_crystal/weather_fetcher"
 
 require "./weather_crystal/providers/provider"

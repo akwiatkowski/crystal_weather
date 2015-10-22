@@ -1,9 +1,12 @@
 class WeatherCrystal::WeatherStorage
-  def initialize
+  def initialize(_logger)
+    @logger = _logger
     @metar_last_times = {} of String => Time
   end
 
   METAR_THRESHOLD_STORE_TIME = Time::Span.new(4, 0, 0)
+
+  getter :logger
 
   def store(weather_datas)
     count = 0
@@ -77,7 +80,7 @@ class WeatherCrystal::WeatherStorage
     Dir.mkdir_p(path_dir)
 
     file = File.new(path_file, "a")
-    file.puts data.regular_to_json
+    file.puts data.to_json
     file.close
 
     return true

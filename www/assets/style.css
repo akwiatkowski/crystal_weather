@@ -1,0 +1,17 @@
+body {
+  margin-left: 12px;
+}
+
+.hidden {
+  display: none;
+}
+
+
+table.weather {
+  border: 1px dotted gray;
+}
+
+table.weather td {
+  padding: 10px;
+  border: 1px dotted gray;
+}

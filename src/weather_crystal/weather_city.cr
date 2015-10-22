@@ -39,8 +39,8 @@ class WeatherCrystal::WeatherCity
       coords = hash[":coords"] as Hash(YAML::Type, YAML::Type)
 
       city = new
-      city.name = hash[":name"]
-      city.country = hash[":country"]
+      city.name = hash[":name"].to_s
+      city.country = hash[":country"].to_s
 
       if hash.has_key?(":metar")
         city.metar = hash[":metar"].to_s

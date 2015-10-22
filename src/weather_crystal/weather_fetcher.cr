@@ -19,7 +19,8 @@ class WeatherCrystal::WeatherFetcher
 
     @regular_interia_pl = WeatherCrystal::Provider::InteriaPl.new(@logger)
 
-    @storage = WeatherCrystal::WeatherStorage.new
+    @storage = WeatherCrystal::WeatherStorage.new(@logger)
+    @web_storage = WeatherCrystal::WeatherWebStorage.new(@logger)
 
     @sleep_metar_amount = 60 * 10
     @sleep_regular_amount = 3 * 60 * 60
@@ -31,6 +32,7 @@ class WeatherCrystal::WeatherFetcher
 
       weathers = single_fetch_metar_per_city(city)
       count = @storage.store(weathers)
+      @web_storage.post_store_array(weathers)
 
       @logger.info "#{city.metar}/#{city.name} done with #{count} weather data" if count > 0
     end
@@ -42,6 +44,7 @@ class WeatherCrystal::WeatherFetcher
 
       weathers = single_fetch_regular_per_city(city)
       count = @storage.store(weathers)
+      @web_storage.post_store_array(weathers)
 
       @logger.info "#{city.name}/#{city.country} done with #{count} weather data" if count > 0
     end
@@ -83,12 +86,14 @@ class WeatherCrystal::WeatherFetcher
   def metar_fetch
     single_fetch_metar
     @logger.info("Metar sleep #{@sleep_metar_amount}")
+    @web_storage.materialize_metar
     sleep @sleep_metar_amount
   end
 
   def regular_fetch
     single_fetch_regular
     @logger.info("Regular sleep #{@sleep_regular_amoun}")
+    @web_storage.materialize_regular
     sleep @sleep_regular_amount
   end
 end
