@@ -64,8 +64,6 @@ class WeatherCrystal::Provider::InteriaPl < WeatherCrystal::HttpProvider
       day += 1
     end
 
-    puts 1
-
     return array
   end
 end
