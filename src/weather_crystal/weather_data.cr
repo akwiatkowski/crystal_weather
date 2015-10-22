@@ -2,13 +2,13 @@ require "./weather_city"
 require "json"
 
 class WeatherCrystal::WeatherData
-  BLANK_TEMP = -255.0
-  BLANK_WIND = -1.0
-  BLANK_WIND_DIRECTION = -1
-  BLANK_HUMIDITY = -1.0
-  BLANK_VALUE = -1
-  BLANK_RAIN = -1.0
-  BLANK_STRING = ""
+  BLANK_TEMP           = -255.0
+  BLANK_WIND           =   -1.0
+  BLANK_WIND_DIRECTION =     -1
+  BLANK_HUMIDITY       =   -1.0
+  BLANK_VALUE          =     -1
+  BLANK_RAIN           =   -1.0
+  BLANK_STRING         = ""
 
   def initialize(_city)
     @city = _city as WeatherCity
@@ -101,12 +101,10 @@ class WeatherCrystal::WeatherData
     if is_metar?
       h["metar"] = city.metar
       h["metar_string"] = metar_string
-
     else
       h["source"] = source
       h["rain_mm"] = rain_mm unless BLANK_RAIN == rain_mm
       h["snow_mm"] = snow_mm unless BLANK_RAIN == snow_mm
-
     end
 
     return h

@@ -14,8 +14,8 @@ class WeatherCrystal::WeatherCity
   property :url_hash
 
   CLASSES_NAMES = [
-    "InteriaPl"
-  ]
+                    "InteriaPl",
+                  ]
 
   def initialize
     @metar = ""

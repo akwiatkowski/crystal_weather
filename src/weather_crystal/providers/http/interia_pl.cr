@@ -10,8 +10,8 @@ class WeatherCrystal::Provider::InteriaPl < WeatherCrystal::HttpProvider
   end
 
   def url_for_city(city)
-    if city.url_hash.has_key?( self.class.provider_key )
-      return city.url_hash[ self.class.provider_key ]
+    if city.url_hash.has_key?(self.class.provider_key)
+      return city.url_hash[self.class.provider_key]
     else
       return ""
     end
@@ -22,13 +22,11 @@ class WeatherCrystal::Provider::InteriaPl < WeatherCrystal::HttpProvider
 
     x = XML.parse_html(data)
     initial_time = Time.new(
-      Time.now.year,
-      Time.now.month,
-      Time.now.day
-    )
+                     Time.now.year,
+                     Time.now.month,
+                     Time.now.day
+                   )
     day = 0
-    span_day =
-    span_hour = Time::Span.new(1, 0, 0)
 
     main_content = x.xpath_node("//*[@class='main-content']")
     forecast_day_nodes = main_content.xpath_nodes(".//*[contains(@class, 'weather-forecast-day')]")
@@ -36,7 +34,10 @@ class WeatherCrystal::Provider::InteriaPl < WeatherCrystal::HttpProvider
 
       hourly_nodes = day_node.xpath_nodes(".//*[@class='weather-entry']")
       hourly_nodes.each do |hour_node|
+
+        begin
         d = WeatherData.new(city)
+
 
         hour = hour_node.xpath_node(".//*[@class='hour']").inner_text.to_s.to_i
         d.time_from = initial_time + Time::Span.new(day, hour, 0, 0)
@@ -54,10 +55,16 @@ class WeatherCrystal::Provider::InteriaPl < WeatherCrystal::HttpProvider
 
         d.source = self.class.provider_key
 
+
         array << d
+      rescue
+        # error
+      end
       end
       day += 1
     end
+
+    puts 1
 
     return array
   end

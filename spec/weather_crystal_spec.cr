@@ -3,6 +3,5 @@ require "xml"
 
 describe WeatherCrystal do
   it "gets METAR" do
-    
   end
 end

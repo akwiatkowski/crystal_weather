@@ -14,6 +14,5 @@ describe WeatherCrystal::Provider::InteriaPl do
     array = f.fetch_for_city(city)
 
     puts array.inspect
-
   end
 end

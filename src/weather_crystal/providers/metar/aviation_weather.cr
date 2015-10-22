@@ -15,5 +15,4 @@ class WeatherCrystal::Provider::AviationWeather < WeatherCrystal::MetarProvider
 
     return string
   end
-
 end

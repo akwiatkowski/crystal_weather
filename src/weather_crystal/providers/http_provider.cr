@@ -11,7 +11,7 @@ class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
 
       result = download(url)
       if result.status_code == 200
-        return process_for_city(city, process_body( result.body) )
+        return process_for_city(city, process_body(result.body))
       else
         self.logger.error("HttpProvider Http status not 200, url #{url}, city #{city.inspect}")
         return [] of WeatherData
@@ -19,8 +19,10 @@ class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
     rescue Socket::Error
       self.logger.error("HttpProvider Socket::Error, city #{city.inspect}")
       return [] of WeatherData
-    rescue
-      self.logger.error("HttpProvider Other error, city #{city.inspect}")
+    rescue ex
+      self.logger.error("HttpProvider Other error, city #{city.inspect}, #{ex.message}")
+      self.logger.error("#{ex.cause}")
+      self.logger.error("#{ex.backtrace}")
       return [] of WeatherData
     end
   end

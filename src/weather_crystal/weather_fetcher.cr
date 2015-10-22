@@ -52,9 +52,8 @@ class WeatherCrystal::WeatherFetcher
 
   def single_fetch_metar_per_city(city)
     weathers = [] of WeatherData
-    weathers += @metar_noaa.fetch_for_city(city)
     weathers += @metar_wunderground.fetch_for_city(city)
-    weathers += @metar_aviation_weather.fetch_for_city(city)
+    weathers += @metar_noaa.fetch_for_city(city)
 
     return weathers
   end

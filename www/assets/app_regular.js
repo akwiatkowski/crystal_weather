@@ -1,4 +1,4 @@
-class MetarBox extends React.Component {
+class WeatherBox extends React.Component {
   constructor(props) {
     super(props);
 
@@ -22,18 +22,17 @@ class MetarBox extends React.Component {
   render() {
     return (
       <div>
-        <h1>METARs</h1>
-        <MetarWeatherTable data={this.state.data}/>
+        <h1>Regular weather</h1>
+        <WeatherTable data={this.state.data}/>
       </div>
     );
   }
 }
 
-class MetarWeatherRow extends React.Component {
+class WeatherRow extends React.Component {
   render() {
     return (
-      <tr key={this.props.data.metar} title={this.props.data.metar_string}>
-        <td>{this.props.data.metar}</td>
+      <tr key={this.props.data.metar}>
         <td>{this.props.data.city}</td>
         <td>{this.props.data.country}</td>
         <td><a href={"http://www.openstreetmap.org/#map=12/" + this.props.data.lat + "/" +  this.props.data.lon} target="_blank">{this.props.data.lat}, {this.props.data.lon}</a></td>
@@ -41,30 +40,30 @@ class MetarWeatherRow extends React.Component {
         <td>{moment.unix(this.props.data.time_from).format("HH:mm")}</td>
         <td>{moment.unix(this.props.data.time_to).format("HH:mm")}</td>
         <td>{this.props.data.temperature} C</td>
+        <td>{this.props.data.wind_chill} C</td>
+
         <td>{Math.round(this.props.data.wind, 2)} m/s</td>
         <td>{this.props.data.pressure} hPa</td>
-        <td>{this.props.data.clouds} %</td>
-        <td>{this.props.data.rain_metar}</td>
-        <td>{this.props.data.snow_metar}</td>
-
+        <td>{this.props.data.clouds}</td>
+        <td>{this.props.data.rain_mm} mm</td>
+        <td>{this.props.data.snow_mm} mm</td>
       </tr>
     );
   }
 }
 
-class MetarWeatherTable extends React.Component {
+class WeatherTable extends React.Component {
   render() {
-    var metarNodes = this.props.data.map((metar) => {
+    var weatherNodes = this.props.data.map((weather) => {
       return (
-        <MetarWeatherRow data={metar}></MetarWeatherRow>
+        <WeatherRow data={weather}></WeatherRow>
       );
     });
     return (
       <div>
-        <table className="weather metar">
+        <table className="weather regular-weather">
           <tbody>
             <tr>
-              <th>Metar</th>
               <th>City</th>
               <th>Country</th>
               <th>Coords</th>
@@ -72,14 +71,14 @@ class MetarWeatherTable extends React.Component {
               <th>From</th>
               <th>To</th>
               <th>Temperature</th>
+              <th>Wind chill</th>
               <th>Wind</th>
               <th>Pressure</th>
               <th>Clouds</th>
               <th>Rain</th>
               <th>Snow</th>
-      
             </tr>
-            {metarNodes}
+            {weatherNodes}
           </tbody>
         </table>
       </div>
@@ -87,4 +86,4 @@ class MetarWeatherTable extends React.Component {
   }
 }
 
-ReactDOM.render(<MetarBox url="metar.json" pollInterval={1800000} />, document.getElementById('content'));
+ReactDOM.render(<WeatherBox url="weather.json" pollInterval={3600000} />, document.getElementById('content'));
