@@ -25,6 +25,8 @@ class WeatherCrystal::WeatherWebStorage
   end
 
   def post_store(weather_data)
+    return unless weather_data.is_valid?
+
     if weather_data.is_metar?
       @last_metar_data[weather_data.key] = weather_data
     else
@@ -50,7 +52,8 @@ class WeatherCrystal::WeatherWebStorage
 
     i = 0
     while i < @regular_data.size
-      if regs.size == 0 || (@regular_data[i].time_from - regs[-1].time_from) > @regular_store_span
+      if  regs.size == 0 || (@regular_data[i].time_from - regs[-1].time_from) > @regular_store_span ||
+          (i > 0 && @regular_data[i].key != @regular_data[i-1].key ) # city change
         regs << @regular_data[i]
       end
 

@@ -68,6 +68,10 @@ class WeatherCrystal::WeatherData
     self.metar_string != ""
   end
 
+  def is_valid?
+    return temperature != BLANK_TEMP && wind != BLANK_WIND
+  end
+
   def wind_speed_in_kmh=(_kmh)
     @wind = _kmh.to_f / 3.6
   end
