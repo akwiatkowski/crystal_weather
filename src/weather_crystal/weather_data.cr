@@ -45,7 +45,7 @@ class WeatherCrystal::WeatherData
   property :city
   property :source
   property :metar_string, :metar
-  property :time_from, :time_to
+  property :time_from, :time_to, :time_created
   property :temperature, :dew, :humidity, :wind_chill
   property :wind, :wind_direction
   property :visibility, :pressure, :clouds
@@ -87,6 +87,7 @@ class WeatherCrystal::WeatherData
 
     h["time_from"] = time_from.epoch
     h["time_to"] = time_to.epoch
+    h["time_created"] = time_created.epoch
 
     h["temperature"] = temperature unless BLANK_TEMP == temperature
     h["dew"] = dew unless BLANK_TEMP == dew

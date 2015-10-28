@@ -22,8 +22,9 @@ class WeatherCrystal::WeatherFetcher
     @storage = WeatherCrystal::WeatherStorage.new(@logger)
     @web_storage = WeatherCrystal::WeatherWebStorage.new(@logger)
 
-    @sleep_metar_amount = 60 * 10
+    @sleep_metar_amount = 10 * 60
     @sleep_regular_amount = 3 * 60 * 60
+    @sleep_loop = 60
 
     @next_metar_at = Time.now
     @next_regular_at = Time.now
@@ -99,7 +100,7 @@ class WeatherCrystal::WeatherFetcher
         end
       end
 
-      sleep 10
+      sleep @sleep_loop
     end
   end
 
@@ -115,7 +116,5 @@ class WeatherCrystal::WeatherFetcher
     @last_done_regular_at = Time.now
     @logger.info("Regular done")
     @web_storage.materialize_regular
-
-    GC.collect
   end
 end
