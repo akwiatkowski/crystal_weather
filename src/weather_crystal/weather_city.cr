@@ -62,8 +62,6 @@ class WeatherCrystal::WeatherCity
       city.lon = coords[":lon"].to_s.to_f
 
       cities << city
-
-      return cities
     end
 
     return cities
