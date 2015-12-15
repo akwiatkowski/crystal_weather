@@ -1,3 +1,5 @@
+# http://en.allmetsat.com/metar-taf/greenland.php?icao=BGBW
+
 - :name: 'Poznań'
   :country: 'Poland'
   :metar: 'EPPO'
@@ -1036,3 +1038,246 @@
   :coords:
     :lat: 19.2821
     :lon: 166.6364
+
+
+- :name: Yakutsk
+  :country: Russia
+  :metar: UEEE
+  :coords:
+    :lat: 62.032847
+    :lon: 129.5661112
+
+- :name: Homer
+  :country: Alaska
+  :metar: PAHO
+  :coords:
+    :lat: 59.671689
+    :lon: -151.8234154
+
+- :name: Wainwright
+  :country: Alaska
+  :metar: PAWI
+  :coords:
+    :lat: 70.6501841
+    :lon: -159.9916805
+
+- :name: Cape Peel West
+  :country: Canada
+  :metar: CWPX
+  :coords:
+    :lat: 68.803796
+    :lon: -108.748515
+
+- :name: Longyearbyen
+  :country: Longyearbyen
+  :metar: ENSB
+  :coords:
+    :lat: 78.2057976
+    :lon: 15.4092532
+
+- :name: Alert
+  :country: Canada
+  :metar: CYLT
+  :coords:
+    :lat: 82.5053365
+    :lon: -62.5572432
+
+- :name: Thule
+  :country: Greenland
+  :metar: BGTL
+  :coords:
+    :lat: 76.384177
+    :lon: -69.354361
+
+- :name: Narsarsuaq
+  :country: Greenland
+  :metar: BGBW
+  :coords:
+    :lat: 61.1596509
+    :lon: -45.4388181
+
+- :name: Sørvágur
+  :country: Faroe Islands
+  :metar: EKVG
+  :coords:
+    :lat: 62.071608
+    :lon: -7.3251342
+
+- :name: Tromsø
+  :country: Norway
+  :metar: ENTC
+  :coords:
+    :lat: 69.6652735
+    :lon: 18.8477109
+
+- :name: Vardø
+  :country: Norway
+  :metar: ENSS
+  :coords:
+    :lat: 70.3369225
+    :lon: 30.3411291
+
+- :name: Murmansk
+  :country: Russia
+  :metar: ULMM
+  :coords:
+    :lat: 68.9675223
+    :lon: 32.9457127
+
+- :name: Khanty-Mansiysk
+  :country: Russia
+  :metar: USHH
+  :coords:
+    :lat: 61.0052241
+    :lon: 68.9941333
+
+- :name: Abakan
+  :country: Russia
+  :metar: UNAA
+  :coords:
+    :lat: 53.5271363
+    :lon: 91.0362371
+
+- :name: Ulan-Ude
+  :country: Russia
+  :metar: UIUU
+  :coords:
+    :lat: 51.8299928
+    :lon: 107.5461246
+
+- :name: Chita
+  :country: Russia
+  :metar: UIAA
+  :coords:
+    :lat: 52.0474617
+    :lon: 113.3850775
+
+- :name: Ulan Bator
+  :country: Mongolia
+  :metar: ZMUB
+  :coords:
+    :lat: 47.8917439
+    :lon: 106.8318318
+
+- :name: Magadan
+  :country: Russia
+  :metar: UHMM
+  :coords:
+    :lat: 59.5825138
+    :lon: 150.4481833
+
+- :name: Anadyr
+  :country: Russia
+  :metar: UHMA
+  :coords:
+    :lat: 64.6232866
+    :lon: 176.1530626
+
+- :name: Gambell
+  :country: Alaska
+  :metar: PAGM
+  :coords:
+    :lat: 63.7469389
+    :lon: -171.7590709
+
+- :name: McKinley Park
+  :country: Alaska
+  :metar: PAIN
+  :coords:
+    :lat: 63.617578
+    :lon: -148.9587069
+
+####
+
+- :name: Tangier
+  :country: Morocco
+  :metar: GMTT
+  :coords:
+    :lat: 35.781912
+    :lon: -5.823081
+
+- :name: Bangui
+  :country: Central African Republic
+  :metar: FEFF
+  :coords:
+    :lat: 4.389689
+    :lon: 18.560719
+
+- :name: Georgetown (AI)
+  :country: Ascension Island
+  :metar: FHAW
+  :url: https://en.wikipedia.org/wiki/Ascension_Island
+  :coords:
+    :lat: -7.933333
+    :lon: -14.366667
+
+- :name: Moroni
+  :country: Comoros
+  :metar: FMCH
+  :coords:
+    :lat: -11.706414
+    :lon: 43.270278
+
+- :name: Tehran
+  :country: Iran
+  :metar: OIII
+  :coords:
+    :lat: 35.6970118
+    :lon: 51.2097351
+
+- :name: Diego Garcia
+  :country: BIOT
+  :metar: FJDG
+  :coords:
+    :lat: -7.3049327
+    :lon: 72.4026183
+
+- :name: Christchurch
+  :country: New Zealand
+  :metar: NZCH
+  :coords:
+    :lat: -43.519026
+    :lon: 172.643703
+
+- :name: Funafuti
+  :country: Tuvalu
+  :metar: NGFU
+  :coords:
+    :lat: -8.519883
+    :lon: 179.199475
+
+- :name: Koror
+  :country: Palau
+  :metar: FJDG
+  :coords:
+    :lat: 7.340509
+    :lon: 134.477143
+
+
+- :name: Port of Spain
+  :country: Trinidad
+  :metar: YPLM
+  :coords:
+    :lat: 10.654328
+    :lon: -61.506033
+
+- :name: Carmacks
+  :country: Canada
+  :metar: CXCK
+  :coords:
+    :lat: 62.090508
+    :lon: -136.287466
+
+- :name: Big Trout Lake
+  :country: Canada
+  :metar: CYTL
+  :coords:
+    :lat: 53.817746
+    :lon: -89.834446
+
+- :name: Sundre
+  :country: Canada
+  :metar: CWAV
+  :coords:
+    :lat: 51.798835
+    :lon: -114.642548
