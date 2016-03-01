@@ -36,12 +36,12 @@ class WeatherCrystal::WeatherWebStorage
 
   def materialize_metar
     result = String.build do |node|
-               node.json_array do |array|
-                 @last_metar_data.each_key do |metar|
-                   array << @last_metar_data[metar].to_hash
-                 end
-               end
-             end
+      node.json_array do |array|
+        @last_metar_data.each_key do |metar|
+          array << @last_metar_data[metar].to_hash
+        end
+      end
+    end
 
     File.write(@metar_path, result)
     @logger.debug("Website metar JSON saved")
@@ -52,8 +52,8 @@ class WeatherCrystal::WeatherWebStorage
 
     i = 0
     while i < @regular_data.size
-      if  regs.size == 0 || (@regular_data[i].time_from - regs[-1].time_from) > @regular_store_span ||
-          (i > 0 && @regular_data[i].key != @regular_data[i-1].key ) # city change
+      if regs.size == 0 || (@regular_data[i].time_from - regs[-1].time_from) > @regular_store_span ||
+         (i > 0 && @regular_data[i].key != @regular_data[i - 1].key) # city change
         regs << @regular_data[i]
       end
 
@@ -61,21 +61,21 @@ class WeatherCrystal::WeatherWebStorage
     end
 
     regs = regs.sort do |a, b|
-                      key_compare = a.key <=> b.key
-                      if key_compare != 0
-                        key_compare
-                      else
-                        a.time_from <=> b.time_from
-                      end
-                    end
+      key_compare = a.key <=> b.key
+      if key_compare != 0
+        key_compare
+      else
+        a.time_from <=> b.time_from
+      end
+    end
 
     result = String.build do |node|
-               node.json_array do |array|
-                 regs.each do |w|
-                   array << w.to_hash
-                 end
-               end
-             end
+      node.json_array do |array|
+        regs.each do |w|
+          array << w.to_hash
+        end
+      end
+    end
 
     File.write(@regular_path, result)
     @logger.debug("Website regular JSON saved")

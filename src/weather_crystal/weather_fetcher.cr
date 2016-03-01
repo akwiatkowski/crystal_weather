@@ -7,9 +7,9 @@ class WeatherCrystal::WeatherFetcher
 
     @logger = Logger.new(STDOUT)
     @logger.formatter = Logger::Formatter.new do |severity, datetime, progname, message, io|
-                          io << severity[0] << ", [" << datetime.to_s("%H:%M:%S.%L") << "] "
-                          io << severity.rjust(5) << ": " << message
-                        end
+      io << severity[0] << ", [" << datetime.to_s("%H:%M:%S.%L") << "] "
+      io << severity.rjust(5) << ": " << message
+    end
     @logger.level = Logger::DEBUG
 
     # providers
@@ -59,7 +59,7 @@ class WeatherCrystal::WeatherFetcher
   end
 
   def single_fetch_metar_per_city(city)
-    weathers = [] of WeatherData
+    weathers = Array(WeatherCrystal::WeatherData).new
     weathers += @metar_wunderground.fetch_for_city(city)
     weathers += @metar_noaa.fetch_for_city(city)
 
@@ -67,7 +67,7 @@ class WeatherCrystal::WeatherFetcher
   end
 
   def single_fetch_regular_per_city(city)
-    weathers = [] of WeatherData
+    weathers = Array(WeatherCrystal::WeatherData).new
     weathers += @regular_interia_pl.fetch_for_city(city)
 
     return weathers
@@ -84,7 +84,6 @@ class WeatherCrystal::WeatherFetcher
       @logger.info(" METAR  : done #{metar_done_span}, next #{metar_span}")
       @logger.info(" REGULAR: done #{regular_done_span}, next #{regular_span}")
       @logger.debug("GC: #{GC.stats.inspect}")
-
 
       if metar_span <= @zero_time_span
         future do

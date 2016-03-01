@@ -19,16 +19,20 @@ class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
     rescue Socket::Error
       self.logger.error("HttpProvider Socket::Error, city #{city.inspect}")
       return [] of WeatherData
-    rescue ex
-      self.logger.error("HttpProvider Other error, city #{city.inspect}, #{ex.message}")
-      self.logger.error("#{ex.cause}")
-      self.logger.error("#{ex.backtrace}")
-      return [] of WeatherData
+      # rescue ex
+      #  self.logger.error("HttpProvider Other error, city #{city.inspect}, #{ex.message}")
+      #  self.logger.error("#{ex.cause}")
+      #  self.logger.error("#{ex.backtrace}")
+      #  return [] of WeatherData
     end
   end
 
   def download(url)
-    return HTTP::Client.get(url)
+    headers = HTTP::Headers.new
+    # there was problem with Zlib and Wunderground
+    headers["Accept-Encoding"] = "gzip;q=0,deflate;q=0"
+    response = HTTP::Client.exec("GET", url, headers)
+    return response
   end
 
   def process_body(body)

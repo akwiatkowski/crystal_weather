@@ -1,7 +1,7 @@
 class WeatherCrystal::WeatherCity
-  @lat :: Float64
-  @lon :: Float64
-  @metar :: String
+  @lat : Float64
+  @lon : Float64
+  @metar : String
 
   property :name
   property :country
@@ -14,8 +14,8 @@ class WeatherCrystal::WeatherCity
   property :url_hash
 
   CLASSES_NAMES = [
-                    "InteriaPl",
-                  ]
+    "InteriaPl",
+  ]
 
   def initialize
     @metar = ""
@@ -32,27 +32,26 @@ class WeatherCrystal::WeatherCity
     cities = [] of WeatherCrystal::WeatherCity
 
     s = File.read(path)
-    data = YAML.load(s) as Array
+    data = YAML.parse(s)
 
-    data.each do |d|
-      hash = d as Hash(YAML::Type, YAML::Type)
-      coords = hash[":coords"] as Hash(YAML::Type, YAML::Type)
+    data.each do |hash|
+      coords = hash[":coords"]
 
       city = new
       city.name = hash[":name"].to_s
       city.country = hash[":country"].to_s
 
-      if hash.has_key?(":metar")
+      if hash[":metar"]?
         city.metar = hash[":metar"].to_s
       end
 
       # load data for external classes
-      if hash.has_key?(":classes")
-        classes_hash = hash[":classes"] as Hash(YAML::Type, YAML::Type)
+      if hash[":classes"]?
+        classes_hash = hash[":classes"]
 
         CLASSES_NAMES.each do |k|
-          if classes_hash.has_key?(k)
-            class_hash = classes_hash["InteriaPl"] as Hash(YAML::Type, YAML::Type)
+          if classes_hash[k]?
+            class_hash = classes_hash["InteriaPl"]
             city.url_hash[k] = class_hash[":url"].to_s
           end
         end
