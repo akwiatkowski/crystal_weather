@@ -3,7 +3,7 @@ require "xml"
 
 describe WeatherCrystal::Provider::InteriaPl do
   it "gets single weather" do
-    url = "http://pogoda.interia.pl/prognoza-szczegolowa-poznan,cId,27457"
+    url = "https://pogoda.interia.pl/prognoza-szczegolowa-poznan,cId,27457"
 
     city = WeatherCrystal::WeatherCity.new
     city.name = "Poznań"

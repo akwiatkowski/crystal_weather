@@ -15,7 +15,7 @@ class WeatherCrystal::MetarProvider < WeatherCrystal::HttpProvider
   end
 
   def process_for_city(city, data)
-    metar = CrystalMetarParser::Parser.parse(data)
+    metar = CrystalMetarParser::Parser.parse(metar: data.to_s, year: Time.now.year, month: Time.now.month)
     data = WeatherData.new(city)
 
     # copy properties
@@ -37,8 +37,8 @@ class WeatherCrystal::MetarProvider < WeatherCrystal::HttpProvider
     data.pressure = metar.pressure.pressure
     data.clouds = metar.clouds.clouds_max
 
-    data.rain_metar = metar.specials.rain_metar
-    data.snow_metar = metar.specials.snow_metar
+    data.rain_metar = metar.specials.rain_metar.to_i
+    data.snow_metar = metar.specials.snow_metar.to_i
 
     return [data]
   end

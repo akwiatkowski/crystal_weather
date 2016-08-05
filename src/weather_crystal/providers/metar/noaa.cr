@@ -1,7 +1,8 @@
 class WeatherCrystal::Provider::Noaa < WeatherCrystal::MetarProvider
   def url_for_city(city)
     return "" if city.metar == ""
-    return "http://weather.noaa.gov/pub/data/observations/metar/stations/#{city.metar.to_s.upcase}.TXT"
+    # return "http://weather.noaa.gov/pub/data/observations/metar/stations/#{city.metar.to_s.upcase}.TXT"
+    return "http://tgftp.nws.noaa.gov/data/observations/metar/stations/#{city.metar.to_s.upcase}.TXT"
   end
 
   def process_body(string)

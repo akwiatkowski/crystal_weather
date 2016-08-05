@@ -2,6 +2,8 @@ require "./weather_city"
 require "json"
 
 class WeatherCrystal::WeatherData
+  @metar : (Nil | CrystalMetarParser::Metar)
+
   BLANK_TEMP           = -255.0
   BLANK_WIND           =   -1.0
   BLANK_WIND_DIRECTION =     -1
@@ -77,7 +79,7 @@ class WeatherCrystal::WeatherData
   end
 
   def max_wind_speed_in_kmh=(_kmh)
-    @max_wind = _kmh.to_f / 3.6
+    @wind_max = _kmh.to_f / 3.6
   end
 
   def to_hash

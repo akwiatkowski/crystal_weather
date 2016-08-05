@@ -31,6 +31,7 @@ class WeatherCrystal::Provider::InteriaPl < WeatherCrystal::HttpProvider
     main_content = x.xpath_node("//*[@class='main-content']")
     forecast_day_nodes = main_content.xpath_nodes(".//*[contains(@class, 'weather-forecast-day')]")
     forecast_day_nodes.each do |day_node|
+
       hourly_nodes = day_node.xpath_nodes(".//*[@class='weather-entry']")
       hourly_nodes.each do |hour_node|
         begin
@@ -48,7 +49,7 @@ class WeatherCrystal::Provider::InteriaPl < WeatherCrystal::HttpProvider
           d.max_wind_speed_in_kmh = hour_node.xpath_node(".//*[@class='wind-hit']").inner_text.to_s.gsub(/\D/, "").to_f
 
           d.clouds = hour_node.xpath_node(".//*[@class='entry-precipitation-value cloud-cover']").inner_text.to_s.gsub(/\D/, "").to_i
-          d.rain_mm = hour_node.xpath_node(".//*[@class='entry-precipitation-value rain']").inner_text.to_s.gsub(/\D/, "").to_i
+          d.rain_mm = hour_node.xpath_node(".//*[@class='entry-precipitation-value rain']").inner_text.to_s.gsub(/\D/, "").to_f
 
           d.source = self.class.provider_key
 

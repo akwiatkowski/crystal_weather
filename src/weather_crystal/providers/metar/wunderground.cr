@@ -1,7 +1,7 @@
 class WeatherCrystal::Provider::Wunderground < WeatherCrystal::MetarProvider
   def url_for_city(city)
     return "" if city.metar == ""
-    return "http://www.wunderground.com/Aviation/index.html?query=#{city.metar.upcase}"
+    return "https://www.wunderground.com/Aviation/index.html?query=#{city.metar.upcase}"
   end
 
   def process_body(string)

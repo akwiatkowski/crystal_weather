@@ -10,10 +10,10 @@ class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
       return [] of WeatherData if url == ""
 
       result = download(url)
-      if result.status_code == 200
+      if is_okay?(result)
         return process_for_city(city, process_body(result.body))
       else
-        self.logger.error("HttpProvider Http status not 200, url #{url}, city #{city.inspect}")
+        self.logger.error("HttpProvider Http status not 200 != #{result.status_code}, url #{url}, city #{city.inspect}")
         return [] of WeatherData
       end
     rescue Socket::Error
@@ -27,10 +27,15 @@ class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
     end
   end
 
+  def is_okay?(result)
+    return result.success?
+  end
+
   def download(url)
     headers = HTTP::Headers.new
     # there was problem with Zlib and Wunderground
     headers["Accept-Encoding"] = "gzip;q=0,deflate;q=0"
+    headers["User-Agent"] = "Mozilla/5.0 (Windows NT 6.0) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11"
     response = HTTP::Client.exec("GET", url, headers)
     return response
   end

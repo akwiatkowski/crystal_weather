@@ -2,6 +2,8 @@ class WeatherCrystal::WeatherCity
   @lat : Float64
   @lon : Float64
   @metar : String
+  @name : String
+  @country : String
 
   property :name
   property :country
@@ -17,13 +19,17 @@ class WeatherCrystal::WeatherCity
     "InteriaPl",
   ]
 
-  def initialize
-    @metar = ""
+  def initialize(
+      @metar = "",
+      @url_hash = Hash(String, String).new
+    )
+
     # last feftched metar string
     @last_metar = ""
 
-    @url_hash = {} of String => String
-
+    # blank initialized
+    @name = ""
+    @country = ""
     @lat = 0.0
     @lon = 0.0
   end
