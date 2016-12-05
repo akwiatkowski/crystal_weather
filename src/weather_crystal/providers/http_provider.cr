@@ -1,8 +1,15 @@
 require "http"
+require "xml"
+require "modest"
 
 # All ugly providers who parse even uglier html code and rip off data
 class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
   TYPE = :http
+
+  def walk(node, level = 0)
+    puts "#{" " * level}#{node.tag_name}#{node.attributes}(#{node.tag_text.strip})"
+    node.children.each { |child| walk(child, level + 1) }
+  end
 
   def fetch_for_city(city)
     begin
@@ -34,7 +41,8 @@ class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
   def download(url)
     headers = HTTP::Headers.new
     # there was problem with Zlib and Wunderground
-    headers["Accept-Encoding"] = "gzip;q=0,deflate;q=0"
+    # headers["Accept-Encoding"] = "gzip;q=0,deflate;q=0"
+    headers["Accept-Encoding"] = "deflate;q=0"
     headers["User-Agent"] = "Mozilla/5.0 (Windows NT 6.0) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11"
     response = HTTP::Client.exec("GET", url, headers)
     return response

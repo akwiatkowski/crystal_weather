@@ -20,10 +20,8 @@ class WeatherCrystal::WeatherCity
   ]
 
   def initialize(
-      @metar = "",
-      @url_hash = Hash(String, String).new
-    )
-
+                 @metar = "",
+                 @url_hash = Hash(String, String).new)
     # last feftched metar string
     @last_metar = ""
 

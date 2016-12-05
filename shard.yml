@@ -8,4 +8,7 @@ dependencies:
   crystal_metar_parser:
     github: akwiatkowski/crystal_metar_parser
 
+  modest:
+    github: kostya/modest
+
 license: GPLv3

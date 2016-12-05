@@ -15,7 +15,7 @@ class WeatherCrystal::WeatherStorage
       return count
     end
 
-    array = weather_datas as Array(WeatherCrystal::WeatherData)
+    array = weather_datas.as(Array(WeatherCrystal::WeatherData))
 
     array.each do |data|
       result = store_data(data)
