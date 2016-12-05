@@ -22,8 +22,8 @@ class WeatherCrystal::WeatherFetcher
     @storage = WeatherCrystal::WeatherStorage.new(@logger)
     @web_storage = WeatherCrystal::WeatherWebStorage.new(@logger)
 
-    @sleep_metar_amount = 10 * 60
-    @sleep_regular_amount = 3 * 60 * 60
+    @sleep_metar_amount = (10 * 60).as(Int32)
+    @sleep_regular_amount = (3 * 60 * 60).as(Int32)
     @sleep_loop = 60
 
     @next_metar_at = Time.now

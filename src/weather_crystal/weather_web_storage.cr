@@ -1,8 +1,7 @@
 require "json"
 
 class WeatherCrystal::WeatherWebStorage
-  def initialize(_logger)
-    @logger = _logger
+  def initialize(@logger = Logger.new(STDOUT))
     @last_metar_data = {} of String => WeatherData
     @regular_data = [] of WeatherData
 

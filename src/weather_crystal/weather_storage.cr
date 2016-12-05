@@ -1,6 +1,5 @@
 class WeatherCrystal::WeatherStorage
-  def initialize(_logger)
-    @logger = _logger
+  def initialize(@logger = Logger.new(STDOUT))
     @metar_last_times = {} of String => Time
   end
 

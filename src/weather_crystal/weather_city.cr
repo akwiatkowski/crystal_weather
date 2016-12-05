@@ -32,8 +32,8 @@ class WeatherCrystal::WeatherCity
     @lon = 0.0
   end
 
-  def self.load_yaml(path)
-    cities = [] of WeatherCrystal::WeatherCity
+  def self.load_yaml(path) : Array(WeatherCrystal::WeatherCity)
+    cities = Array(WeatherCrystal::WeatherCity).new
 
     s = File.read(path)
     data = YAML.parse(s)

@@ -13,6 +13,12 @@ describe WeatherCrystal::Provider::InteriaPl do
     f = WeatherCrystal::Provider::InteriaPl.new
     array = f.fetch_for_city(city)
 
-    puts array.inspect
+    (array.size == 0).should eq false
+
+    array.each do |d|
+      (d.temperature > - 50.0).should eq true
+    end
+
+    puts array.last.inspect
   end
 end
