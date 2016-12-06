@@ -1,4 +1,8 @@
 class WeatherCrystal::Provider::AviationWeather < WeatherCrystal::MetarProvider
+  def self.provider_key
+    "AviationWeather"
+  end
+
   def url_for_city(city)
     return "" if city.metar == ""
     return "http://aviationweather.gov/adds/metars/index.php?submit=1&station_ids=#{city.metar.to_s.upcase}"

@@ -15,6 +15,6 @@ describe WeatherCrystal::Provider::OpenWeatherMap do
     f = WeatherCrystal::Provider::OpenWeatherMap.new
     array = f.fetch_for_city(city)
 
-    puts array.last.inspect
+    puts array.last.to_json
   end
 end

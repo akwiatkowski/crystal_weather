@@ -1,4 +1,8 @@
 class WeatherCrystal::Provider::Noaa < WeatherCrystal::MetarProvider
+  def self.provider_key
+    "Noaa"
+  end
+
   def url_for_city(city)
     return "" if city.metar == ""
     # return "http://weather.noaa.gov/pub/data/observations/metar/stations/#{city.metar.to_s.upcase}.TXT"

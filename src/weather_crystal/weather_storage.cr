@@ -35,11 +35,14 @@ class WeatherCrystal::WeatherStorage
   end
 
   def store_metar?(data)
-    interval = Time.utc_now - data.time_from
+    puts data.to_json, data.inspect
+
+    interval = Time.utc_now - data.time_from.not_nil!
     return false if interval > METAR_THRESHOLD_STORE_TIME
 
+
     if @metar_last_times.has_key?(data.city.metar)
-      if @metar_last_times[data.city.metar] >= data.time_from
+      if @metar_last_times[data.city.metar] >= data.time_from.not_nil!
         # already stored
         return false
       else
@@ -55,7 +58,7 @@ class WeatherCrystal::WeatherStorage
   def store_metar(data)
     return false if false == store_metar?(data)
 
-    monthly_prefix = data.time_from.to_s("%Y_%m")
+    monthly_prefix = data.time_from.not_nil!.to_s("%Y_%m")
     metar_code = data.city.metar
     path_dir = File.join("data", "metar", metar_code, monthly_prefix)
     path_file = File.join(path_dir, "#{metar_code}_#{monthly_prefix}.txt")
@@ -67,14 +70,14 @@ class WeatherCrystal::WeatherStorage
     file.close
 
     # not to store equal
-    @metar_last_times[data.city.metar] = data.time_from
-    data.city.last_metar = data.metar_string
+    @metar_last_times[data.city.metar] = data.time_from.not_nil!
+    data.city.last_metar = data.metar_string.not_nil!
 
     return true
   end
 
   def store_regular(data)
-    monthly_prefix = data.time_from.to_s("%Y_%m")
+    monthly_prefix = data.time_from.not_nil!.to_s("%Y_%m")
     path_dir = File.join("data", "regular", data.city.name.to_s, data.source.to_s, monthly_prefix)
     path_file = File.join(path_dir, "#{data.city.name}_#{data.source}_#{monthly_prefix}.txt")
 

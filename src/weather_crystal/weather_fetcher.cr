@@ -3,8 +3,8 @@ require "logger"
 require "colorize"
 
 class WeatherCrystal::WeatherFetcher
-  def initialize(config_path)
-    @cities = WeatherCrystal::WeatherCity.load_yaml(config_path)
+  def initialize(@config_path : String, @keys_path : String)
+    @cities = WeatherCrystal::WeatherCity.load_yaml(@config_path)
 
     @logger = Logger.new(STDOUT)
     @logger.formatter = Logger::Formatter.new do |severity, datetime, progname, message, io|
@@ -13,12 +13,16 @@ class WeatherCrystal::WeatherFetcher
     end
     @logger.level = Logger::DEBUG
 
+    # providers keys
+    WeatherCrystal::Provider::OpenWeatherMap.load_key(@keys_path)
+
     # providers
     @metar_noaa = WeatherCrystal::Provider::Noaa.new(logger: @logger)
     @metar_wunderground = WeatherCrystal::Provider::Wunderground.new(logger: @logger)
     @metar_aviation_weather = WeatherCrystal::Provider::AviationWeather.new(logger: @logger)
 
     @regular_interia_pl = WeatherCrystal::Provider::InteriaPl.new(logger: @logger)
+    @open_weather_map = WeatherCrystal::Provider::OpenWeatherMap.new(logger: @logger)
 
     @storage = WeatherCrystal::WeatherStorage.new(logger: @logger)
     @web_storage = WeatherCrystal::WeatherWebStorage.new(logger: @logger)
@@ -65,15 +69,33 @@ class WeatherCrystal::WeatherFetcher
 
   def single_fetch_metar_per_city(city)
     weathers = Array(WeatherCrystal::WeatherData).new
-    weathers += @metar_wunderground.fetch_for_city(city)
-    weathers += @metar_noaa.fetch_for_city(city)
+
+    ta = @metar_wunderground.fetch_for_city(city)
+    @logger.debug(" + #{@metar_wunderground.class.provider_key} done with #{ta.size.to_s.colorize(:magenta)}")
+    weathers += ta
+
+    ta = @metar_noaa.fetch_for_city(city)
+    @logger.debug(" + #{@metar_noaa.class.provider_key} done with #{ta.size.to_s.colorize(:magenta)}")
+    weathers += ta
 
     return weathers
   end
 
   def single_fetch_regular_per_city(city)
     weathers = Array(WeatherCrystal::WeatherData).new
-    weathers += @regular_interia_pl.fetch_for_city(city)
+
+    ta = @regular_interia_pl.fetch_for_city(city)
+    @logger.debug(" + #{@regular_interia_pl.class.provider_key} done with #{ta.size.to_s.colorize(:magenta)}")
+    weathers += ta
+
+    if @open_weather_map.class.enabled?
+      ta = @open_weather_map.fetch_for_city(city)
+      @logger.debug(" + #{@open_weather_map.class.provider_key} done with #{ta.size.to_s.colorize(:magenta)}")
+      weathers += ta
+
+      # TODO
+      sleep 1
+    end
 
     return weathers
   end

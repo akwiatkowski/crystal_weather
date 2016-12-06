@@ -15,6 +15,8 @@ class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
   end
 
   def self.load_key(path : String)
+    return unless File.exists?(path)
+
     s = File.read(path)
     data = YAML.parse(s)
 

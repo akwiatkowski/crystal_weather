@@ -51,7 +51,7 @@ class WeatherCrystal::WeatherWebStorage
 
     i = 0
     while i < @regular_data.size
-      if regs.size == 0 || (@regular_data[i].time_from - regs[-1].time_from) > @regular_store_span ||
+      if regs.size == 0 || (@regular_data[i].time_from.not_nil! - regs[-1].time_from.not_nil!) > @regular_store_span ||
          (i > 0 && @regular_data[i].key != @regular_data[i - 1].key) # city change
         regs << @regular_data[i]
       end
@@ -64,7 +64,7 @@ class WeatherCrystal::WeatherWebStorage
       if key_compare != 0
         key_compare
       else
-        a.time_from <=> b.time_from
+        a.time_from.not_nil! <=> b.time_from.not_nil!
       end
     end
 

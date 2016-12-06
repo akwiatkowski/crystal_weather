@@ -34,7 +34,7 @@ class WeatherCrystal::MetarProvider < WeatherCrystal::HttpProvider
     data.wind_direction = metar.wind.direction
 
     data.visibility = metar.visibility.visibility
-    data.pressure = metar.pressure.pressure
+    data.pressure = metar.pressure.pressure.to_f
     data.clouds = metar.clouds.clouds_max
 
     data.rain_metar = metar.specials.rain_metar.to_i

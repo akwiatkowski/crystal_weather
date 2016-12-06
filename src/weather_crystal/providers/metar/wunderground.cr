@@ -1,4 +1,8 @@
 class WeatherCrystal::Provider::Wunderground < WeatherCrystal::MetarProvider
+  def self.provider_key
+    "Wunderground"
+  end
+
   def url_for_city(city)
     return "" if city.metar == ""
     return "https://www.wunderground.com/Aviation/index.html?query=#{city.metar.upcase}"
