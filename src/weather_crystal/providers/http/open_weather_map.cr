@@ -20,7 +20,7 @@ class WeatherCrystal::Provider::OpenWeatherMap < WeatherCrystal::HttpProvider
       d.source = self.class.provider_key
 
       d.time_from = Time.epoch(w["dt"].to_s.to_i)
-      d.time_to = d.time_from + Time::Span.new(3, 0, 0)
+      d.time_to = d.time_from.not_nil! + Time::Span.new(3, 0, 0)
 
       d.temperature = w["main"]["temp"].to_s.to_f
 

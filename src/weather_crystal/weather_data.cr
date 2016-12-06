@@ -2,43 +2,39 @@ require "./weather_city"
 require "json"
 
 class WeatherCrystal::WeatherData
+  @city : WeatherCity
   @metar : (Nil | CrystalMetarParser::Metar)
+  @metar_string : (Nil | String)
+  @source : (Nil | String)
 
-  BLANK_TEMP           = -255.0
-  BLANK_WIND           =   -1.0
-  BLANK_WIND_DIRECTION =     -1
-  BLANK_HUMIDITY       =   -1.0
-  BLANK_VALUE          =     -1
-  BLANK_RAIN           =   -1.0
-  BLANK_STRING         = ""
+  @time_from : (Nil | Time)
+  @time_to : (Nil | Time)
+  @time_created : (Time)
+
+  # temperature
+  @temperature : (Nil | Float64)
+  @temperature_min : (Nil | Float64)
+  @temperature_max : (Nil | Float64)
+  @dew : (Nil | Float64)
+  @wind_chill : (Nil | Float64)
+
+  # wind
+  @wind : (Nil | Float64)
+  @wind_max : (Nil | Float64)
+  @wind_direction : (Nil | Int32)
+
+  @visibility : (Nil | Int32)
+  @pressure : (Nil | Int32)
+  @clouds : (Nil | Int32)
+
+  @rain_metar : (Nil | Int32)
+  @snow_metar : (Nil | Int32)
+
+  @rain_mm : (Nil | Float64)
+  @snow_mm : (Nil | Float64)
 
   def initialize(@city : WeatherCity)
-    @metar = nil
-    @metar_string = ""
-    @source = ""
-
-    @time_from = Time.now
-    @time_to = Time.now
     @time_created = Time.now
-
-    @temperature = BLANK_TEMP
-    @dew = BLANK_TEMP
-    @humidity = BLANK_HUMIDITY
-    @wind_chill = BLANK_TEMP
-
-    @wind = BLANK_WIND
-    @wind_max = BLANK_WIND
-    @wind_direction = BLANK_WIND_DIRECTION
-
-    @visibility = BLANK_VALUE
-    @pressure = BLANK_VALUE
-    @clouds = BLANK_VALUE
-
-    @rain_metar = BLANK_VALUE
-    @snow_metar = BLANK_VALUE
-
-    @rain_mm = BLANK_RAIN
-    @snow_mm = BLANK_RAIN
   end
 
   getter :time_created

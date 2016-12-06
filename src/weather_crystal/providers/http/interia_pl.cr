@@ -38,7 +38,7 @@ class WeatherCrystal::Provider::InteriaPl < WeatherCrystal::HttpProvider
           minute = hour_node.children.first.tag_text.to_s.to_i
 
           d.time_from = initial_time + Time::Span.new(day, hour, minute, 0)
-          d.time_to = d.time_from + Time::Span.new(1, 0, 0)
+          d.time_to = d.time_from.not_nil! + Time::Span.new(1, 0, 0)
 
           temperature_node = hourly_node.css(".forecast-temp").first
           temperature = temperature_node.children.first.tag_text.to_s.gsub(/°C/, "").to_f
