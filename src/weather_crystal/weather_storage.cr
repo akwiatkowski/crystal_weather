@@ -25,6 +25,8 @@ class WeatherCrystal::WeatherStorage
   end
 
   def store_data(data)
+    return false if false == data.is_valid?
+
     if data.is_metar?
       return store_metar(data)
     else

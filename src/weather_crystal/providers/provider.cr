@@ -9,8 +9,7 @@ class WeatherCrystal::Provider
   HOUR = 3600
 
   # Create an instance, definitions can be set here
-  def initialize(_logger = Logger.new(STDOUT))
-    @logger = _logger
+  def initialize(@logger = Logger.new(STDOUT))
   end
 
   getter :logger

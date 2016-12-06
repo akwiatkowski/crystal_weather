@@ -2,7 +2,7 @@ require "./spec_helper"
 require "xml"
 
 describe WeatherCrystal::Provider::InteriaPl do
-  it "gets single weather" do
+  it "gets single weather from InteriaPl" do
     url = "https://pogoda.interia.pl/prognoza-szczegolowa-poznan,cId,27457"
 
     city = WeatherCrystal::WeatherCity.new

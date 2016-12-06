@@ -1,5 +1,6 @@
 require "yaml"
 require "logger"
+require "colorize"
 
 class WeatherCrystal::WeatherFetcher
   def initialize(config_path)
@@ -13,14 +14,14 @@ class WeatherCrystal::WeatherFetcher
     @logger.level = Logger::DEBUG
 
     # providers
-    @metar_noaa = WeatherCrystal::Provider::Noaa.new(@logger)
-    @metar_wunderground = WeatherCrystal::Provider::Wunderground.new(@logger)
-    @metar_aviation_weather = WeatherCrystal::Provider::AviationWeather.new(@logger)
+    @metar_noaa = WeatherCrystal::Provider::Noaa.new(logger: @logger)
+    @metar_wunderground = WeatherCrystal::Provider::Wunderground.new(logger: @logger)
+    @metar_aviation_weather = WeatherCrystal::Provider::AviationWeather.new(logger: @logger)
 
-    @regular_interia_pl = WeatherCrystal::Provider::InteriaPl.new(@logger)
+    @regular_interia_pl = WeatherCrystal::Provider::InteriaPl.new(logger: @logger)
 
-    @storage = WeatherCrystal::WeatherStorage.new(@logger)
-    @web_storage = WeatherCrystal::WeatherWebStorage.new(@logger)
+    @storage = WeatherCrystal::WeatherStorage.new(logger: @logger)
+    @web_storage = WeatherCrystal::WeatherWebStorage.new(logger: @logger)
 
     @sleep_metar_amount = (10 * 60).as(Int32)
     @sleep_regular_amount = (3 * 60 * 60).as(Int32)
@@ -35,26 +36,30 @@ class WeatherCrystal::WeatherFetcher
   end
 
   def single_fetch_metar
-    @cities.each do |city|
-      @logger.info "#{city.metar}/#{city.name} fetching metar" unless city.metar == ""
+    total = @cities.size
+    @cities.each_with_index do |city, i|
+      if city.metar != ""
+        @logger.info "#{city.metar.colorize(:green)}/#{city.name.colorize(:blue)} fetching metar (#{i+1}/#{total})"
 
-      weathers = single_fetch_metar_per_city(city)
-      count = @storage.store(weathers)
-      @web_storage.post_store_array(weathers)
+        weathers = single_fetch_metar_per_city(city)
+        count = @storage.store(weathers)
+        @web_storage.post_store_array(weathers)
 
-      @logger.info "#{city.metar}/#{city.name} done with #{count} weather data" if count > 0
+        @logger.info "#{city.metar.colorize(:green)}/#{city.name.colorize(:blue)} done with #{count.to_s.colorize(:magenta)} weather data" if count > 0
+      end
     end
   end
 
   def single_fetch_regular
-    @cities.each do |city|
-      @logger.info "#{city.name}/#{city.country} fetching regular"
+    total = @cities.size
+    @cities.each_with_index do |city, i|
+      @logger.info "#{city.name.colorize(:blue)}/#{city.country.colorize(:cyan)} fetching regular (#{i+1}/#{total})"
 
       weathers = single_fetch_regular_per_city(city)
       count = @storage.store(weathers)
       @web_storage.post_store_array(weathers)
 
-      @logger.info "#{city.name}/#{city.country} done with #{count} weather data" if count > 0
+      @logger.info "#{city.name.colorize(:blue)}/#{city.country.colorize(:cyan)} done with #{count.to_s.colorize(:magenta)} weather data" if count > 0
     end
   end
 
@@ -106,14 +111,14 @@ class WeatherCrystal::WeatherFetcher
   def metar_fetch
     single_fetch_metar
     @last_done_metar_at = Time.now
-    @logger.info("Metar done")
+    @logger.info("Metar done".colorize(:yellow))
     @web_storage.materialize_metar
   end
 
   def regular_fetch
     single_fetch_regular
     @last_done_regular_at = Time.now
-    @logger.info("Regular done")
+    @logger.info("Regular done".colorize(:yellow))
     @web_storage.materialize_regular
   end
 end

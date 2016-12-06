@@ -15,6 +15,8 @@
       :url: 'http://pogoda.interia.pl/prognoza-szczegolowa-poznan,cId,27457'
     WorldWeatherOnline:
       :key: 'api key'
+    TwojaPogoda:
+        :url: 'http://www.twojapogoda.pl/polska/wielkopolskie/poznan/16dniowa'
 
 - :name: 'Inowrocław'
   :country: 'Poland'

@@ -1,0 +1,19 @@
+# http://en.allmetsat.com/metar-taf/greenland.php?icao=BGBW
+
+- :name: 'Poznań'
+  :country: 'Poland'
+  :metar: 'EPPO'
+  :coords:
+    :lat: 52.411048
+    :lon: 16.928329
+  :classes:
+    OnetPl:
+      :url: 'http://pogoda.onet.pl/prognoza-pogody/dzis/europa,polska,poznan,9204.html'
+    WpPl:
+      :url: 'http://pogoda.wp.pl/cid,43384,miasto,Pozna%C5%84,dlugoterminowa.html'
+    InteriaPl:
+      :url: 'https://pogoda.interia.pl/prognoza-szczegolowa-poznan,cId,27457'
+    WorldWeatherOnline:
+      :key: 'api key'
+    TwojaPogoda:
+      :url: 'http://www.twojapogoda.pl/polska/wielkopolskie/poznan/16dniowa'
