@@ -35,11 +35,8 @@ class WeatherCrystal::WeatherStorage
   end
 
   def store_metar?(data)
-    puts data.to_json, data.inspect
-
     interval = Time.utc_now - data.time_from.not_nil!
     return false if interval > METAR_THRESHOLD_STORE_TIME
-
 
     if @metar_last_times.has_key?(data.city.metar)
       if @metar_last_times[data.city.metar] >= data.time_from.not_nil!
