@@ -12,8 +12,7 @@ class WeatherCrystal::WeatherData
   BLANK_RAIN           =   -1.0
   BLANK_STRING         = ""
 
-  def initialize(_city)
-    @city = _city.as(WeatherCity)
+  def initialize(@city : WeatherCity)
     @metar = nil
     @metar_string = ""
     @source = ""

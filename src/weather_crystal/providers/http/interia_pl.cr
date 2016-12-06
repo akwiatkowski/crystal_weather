@@ -1,8 +1,4 @@
 class WeatherCrystal::Provider::InteriaPl < WeatherCrystal::HttpProvider
-  def self.provider_name
-    "Interia.pl"
-  end
-
   def self.provider_key
     "InteriaPl"
   end
@@ -16,7 +12,7 @@ class WeatherCrystal::Provider::InteriaPl < WeatherCrystal::HttpProvider
   end
 
   def process_for_city(city, data)
-    array = [] of WeatherData
+    array = Array(WeatherData).new
 
     parser = Myhtml::Parser.new(data)
 
@@ -33,6 +29,7 @@ class WeatherCrystal::Provider::InteriaPl < WeatherCrystal::HttpProvider
         hourly_nodes = day_node.css(".weather-entry").to_a
         hourly_nodes.each do |hourly_node|
           d = WeatherData.new(city)
+          d.source = self.class.provider_key
 
           hour_node = hourly_node.css(".entry-hour .hour").first
           hour = hour_node.children.first.tag_text.to_s.to_i

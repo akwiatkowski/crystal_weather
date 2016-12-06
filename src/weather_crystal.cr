@@ -15,6 +15,7 @@ require "./weather_crystal/providers/metar/wunderground"
 require "./weather_crystal/providers/metar/aviation_weather"
 
 require "./weather_crystal/providers/http/interia_pl"
+require "./weather_crystal/providers/http/open_weather_map"
 
 module WeatherCrystal
 end

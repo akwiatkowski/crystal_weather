@@ -9,7 +9,8 @@
 # Dependencies will be locked in application that uses them
 /shard.lock
 
-/config/weather.yml
 /data
 /www/metar.json
 /www/weather.json
+
+/config/keys.yml

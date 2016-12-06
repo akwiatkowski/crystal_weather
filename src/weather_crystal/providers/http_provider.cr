@@ -1,14 +1,26 @@
 require "http"
 require "xml"
 require "modest"
+require "yaml"
 
 # All ugly providers who parse even uglier html code and rip off data
 class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
   TYPE = :http
 
-  def walk(node, level = 0)
-    puts "#{" " * level}#{node.tag_name}#{node.attributes}(#{node.tag_text.strip})"
-    node.children.each { |child| walk(child, level + 1) }
+  # token auth
+  @@token : String = ""
+
+  def self.token=(s : String)
+    @@token = s
+  end
+
+  def self.load_key(path : String)
+    s = File.read(path)
+    data = YAML.parse(s)
+
+    if data[provider_key]?
+      self.token = data[provider_key].to_s
+    end
   end
 
   def fetch_for_city(city)
@@ -59,4 +71,11 @@ class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
   def process_for_city(city, data)
     raise NotImplementedError
   end
+
+  # html debug
+  def walk(node, level = 0)
+    puts "#{" " * level}#{node.tag_name}#{node.attributes}(#{node.tag_text.strip})"
+    node.children.each { |child| walk(child, level + 1) }
+  end
+
 end
