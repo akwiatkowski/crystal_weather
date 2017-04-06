@@ -34,10 +34,15 @@ class WeatherCrystal::WeatherWebStorage
   end
 
   def materialize_metar
-    result = String.build do |node|
-      node.json_array do |array|
+    result = JSON.build do |json|
+      json.array do
         @last_metar_data.each_key do |metar|
-          array << @last_metar_data[metar].to_hash
+          json.object do
+            h = @last_metar_data[metar].to_hash
+            h.keys.each do |key|
+              json.field(key, h[key])
+            end
+          end
         end
       end
     end
@@ -68,10 +73,16 @@ class WeatherCrystal::WeatherWebStorage
       end
     end
 
-    result = String.build do |node|
-      node.json_array do |array|
+    # XXX
+    result = JSON.build do |json|
+      json.array do
         regs.each do |w|
-          array << w.to_hash
+          json.object do
+            h = w.to_hash
+            h.keys.each do |key|
+              json.field(key, h[key])
+            end
+          end
         end
       end
     end

@@ -16,7 +16,7 @@ describe WeatherCrystal::Provider::InteriaPl do
     (array.size == 0).should eq false
 
     array.each do |d|
-      (d.temperature.not_nil! > - 50.0).should eq true
+      (d.temperature.not_nil! > -50.0).should eq true
     end
 
     puts array.last.inspect

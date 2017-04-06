@@ -79,5 +79,4 @@ class WeatherCrystal::HttpProvider < WeatherCrystal::Provider
     puts "#{" " * level}#{node.tag_name}#{node.attributes}(#{node.tag_text.strip})"
     node.children.each { |child| walk(child, level + 1) }
   end
-
 end

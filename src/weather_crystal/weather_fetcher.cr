@@ -3,6 +3,8 @@ require "logger"
 require "colorize"
 
 class WeatherCrystal::WeatherFetcher
+  THREADED = false
+
   def initialize(@config_path : String, @keys_path : String)
     @cities = WeatherCrystal::WeatherCity.load_yaml(@config_path)
 
@@ -43,7 +45,7 @@ class WeatherCrystal::WeatherFetcher
     total = @cities.size
     @cities.each_with_index do |city, i|
       if city.metar != ""
-        @logger.info "#{city.metar.colorize(:green)}/#{city.name.colorize(:blue)} fetching metar (#{i+1}/#{total})"
+        @logger.info "#{city.metar.colorize(:green)}/#{city.name.colorize(:blue)} fetching metar (#{i + 1}/#{total})"
 
         weathers = single_fetch_metar_per_city(city)
         count = @storage.store(weathers)
@@ -57,7 +59,7 @@ class WeatherCrystal::WeatherFetcher
   def single_fetch_regular
     total = @cities.size
     @cities.each_with_index do |city, i|
-      @logger.info "#{city.name.colorize(:blue)}/#{city.country.colorize(:cyan)} fetching regular (#{i+1}/#{total})"
+      @logger.info "#{city.name.colorize(:blue)}/#{city.country.colorize(:cyan)} fetching regular (#{i + 1}/#{total})"
 
       weathers = single_fetch_regular_per_city(city)
       count = @storage.store(weathers)
@@ -113,16 +115,18 @@ class WeatherCrystal::WeatherFetcher
       @logger.debug("GC: #{GC.stats.inspect}")
 
       if metar_span <= @zero_time_span
-        future do
-          @next_metar_at += Time::Span.new(0, 0, @sleep_metar_amount)
-          metar_fetch
+        if THREADED
+          metar_fetch_thread
+        else
+          metar_fetch_now
         end
       end
 
       if regular_span <= @zero_time_span
-        future do
-          @next_regular_at += Time::Span.new(0, 0, @sleep_regular_amount)
-          regular_fetch
+        if THREADED
+          regular_fetch_thread
+        else
+          regular_fetch_now
         end
       end
 
@@ -130,11 +134,35 @@ class WeatherCrystal::WeatherFetcher
     end
   end
 
+  def metar_fetch_thread
+    future do
+      metar_fetch_now
+    end
+  end
+
+  def regular_fetch_thread
+    future do
+      regular_fetch_now
+    end
+  end
+
+  def metar_fetch_now
+    @next_metar_at += Time::Span.new(0, 0, @sleep_metar_amount)
+    metar_fetch
+  end
+
+  def regular_fetch_now
+    @next_regular_at += Time::Span.new(0, 0, @sleep_regular_amount)
+    regular_fetch
+  end
+
   def metar_fetch
     single_fetch_metar
     @last_done_metar_at = Time.now
     @logger.info("Metar done".colorize(:yellow))
     @web_storage.materialize_metar
+
+    puts 1
   end
 
   def regular_fetch
@@ -142,5 +170,7 @@ class WeatherCrystal::WeatherFetcher
     @last_done_regular_at = Time.now
     @logger.info("Regular done".colorize(:yellow))
     @web_storage.materialize_regular
+
+    puts 2
   end
 end
