@@ -45,13 +45,17 @@ class WeatherCrystal::WeatherFetcher
     total = @cities.size
     @cities.each_with_index do |city, i|
       if city.metar != ""
-        @logger.info "#{city.metar.colorize(:green)}/#{city.name.colorize(:blue)} fetching metar (#{i + 1}/#{total})"
+        begin
+          @logger.info "#{city.metar.colorize(:green)}/#{city.name.colorize(:blue)} fetching metar (#{i + 1}/#{total})"
 
-        weathers = single_fetch_metar_per_city(city)
-        count = @storage.store(weathers)
-        @web_storage.post_store_array(weathers)
+          weathers = single_fetch_metar_per_city(city)
+          count = @storage.store(weathers)
+          @web_storage.post_store_array(weathers)
 
-        @logger.info "#{city.metar.colorize(:green)}/#{city.name.colorize(:blue)} done with #{count.to_s.colorize(:magenta)} weather data" if count > 0
+          @logger.info "#{city.metar.colorize(:green)}/#{city.name.colorize(:blue)} done with #{count.to_s.colorize(:magenta)} weather data" if count > 0
+        rescue e : ArgumentError
+          @logger.error "#{city.metar.colorize(:green)}/#{city.name.colorize(:blue)} ArgumentError #{e.inspect}"
+        end
       end
     end
   end
