@@ -55,6 +55,8 @@ class WeatherCrystal::WeatherFetcher
           @logger.info "#{city.metar.colorize(:green)}/#{city.name.colorize(:blue)} done with #{count.to_s.colorize(:magenta)} weather data" if count > 0
         rescue e : ArgumentError
           @logger.error "#{city.metar.colorize(:green)}/#{city.name.colorize(:blue)} ArgumentError #{e.inspect}"
+        rescue e
+          @logger.error "#{city.metar.colorize(:green)}/#{city.name.colorize(:blue)} other error #{e.inspect}"
         end
       end
     end
@@ -63,13 +65,17 @@ class WeatherCrystal::WeatherFetcher
   def single_fetch_regular
     total = @cities.size
     @cities.each_with_index do |city, i|
-      @logger.info "#{city.name.colorize(:blue)}/#{city.country.colorize(:cyan)} fetching regular (#{i + 1}/#{total})"
+      begin
+        @logger.info "#{city.name.colorize(:blue)}/#{city.country.colorize(:cyan)} fetching regular (#{i + 1}/#{total})"
 
-      weathers = single_fetch_regular_per_city(city)
-      count = @storage.store(weathers)
-      @web_storage.post_store_array(weathers)
+        weathers = single_fetch_regular_per_city(city)
+        count = @storage.store(weathers)
+        @web_storage.post_store_array(weathers)
 
-      @logger.info "#{city.name.colorize(:blue)}/#{city.country.colorize(:cyan)} done with #{count.to_s.colorize(:magenta)} weather data" if count > 0
+        @logger.info "#{city.name.colorize(:blue)}/#{city.country.colorize(:cyan)} done with #{count.to_s.colorize(:magenta)} weather data" if count > 0
+      rescue e
+        @logger.error "#{city.name.colorize(:blue)}/#{city.country.colorize(:cyan)} other error #{e.inspect}"
+      end
     end
   end
 
